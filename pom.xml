@@ -17,18 +17,48 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jetty.version>9.4.40.v20210413</jetty.version>
   </properties>
+
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+      <version>6.1.26</version>
+    </dependency>
+   <dependency>
+     <groupId>javax.servlet</groupId>
+         <artifactId>servlet-api</artifactId>
+           <version>2.5</version>
+          <scope>provided</scope>
+    </dependency>
+    <dependency><groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>11.0.6</version>
+    </dependency>
+    <dependency>
+    <groupId>org.eclipse.jetty</groupId>
+    <artifactId>jetty-webapp</artifactId>
+    <version>11.0.6</version>
+  </dependency>
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/webapp</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
     <finalName>ServlHW</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
@@ -36,6 +66,34 @@
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.6</version>
+          <executions>
+            <execution>
+              <id>copy-dependencies</id>
+              <phase>prepare-package</phase>
+              <configuration>
+                <outputDirectory>/lib</outputDirectory>
+                <overWriteReleases>false</overWriteReleases>
+                <overWriteSnapshots>false</overWriteSnapshots>
+                <overWriteIfNewer>true</overWriteIfNewer>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin><groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <configuration><archive><manifest>
+            <addClasspath>true</addClasspath>
+            <classpathPrefix>lib/</classpathPrefix>
+            <mainClass>ru.ibs.hse.servlet_demo.Main</mainClass>
+          </manifest></archive>
+          </configuration>
+        </plugin>
+
+
         <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -61,6 +119,8 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
         </plugin>
+
+
       </plugins>
     </pluginManagement>
   </build>
